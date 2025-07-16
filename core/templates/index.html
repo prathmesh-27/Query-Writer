@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Query Rewriter</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 50px;
+            background: #f4f4f4;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        select,
+        button {
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        .output {
+            background: #e8ffe8;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        button {
+            margin: 10px 5px;
+            padding: 10px 15px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>AI SQL Query Rewriter</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>Explain your query:</label><br>
+        <textarea id="explanation" name="explanation" rows="3" required></textarea><br>
+
+        <!-- <button type="button" onclick="startListening()">🎙️ Speak</button> -->
+        <button type="submit">Generate SQL</button><br><br>
+
+        <label>SQL Dialect:</label>
+        <select name="db_type">
+            <option value="mysql">MySQL</option>
+            <option value="postgresql">PostgreSQL</option>
+            <option value="sqlite">SQLite</option>
+            <option value="oracle">Oracle</option>
+        </select>
+
+        <label>Gemini Model:</label>
+        <select name="model">
+            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+            <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        </select>
+    </form>
+
+    {% if sql_output %}
+    <h2>Generated SQL:</h2>
+    <pre>{{ sql_output }}</pre>
+    {% endif %}
+
+    <hr>
+    <h3>Recent Queries</h3>
+    <ul>
+        {% for q in recent_queries %}
+        <li>
+            <strong>{{ q.explanation }}</strong><br>
+            <code>{{ q.sql_output }}</code><br>
+            ({{ q.db_type }}, {{ q.model_used }}, {{ q.timestamp }})
+        </li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'history' %}">View full history →</a>
+
+
+</body>
+<!-- <script>
+    function startListening() {
+        const textarea = document.getElementById("explanation");
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            alert("Speech Recognition not supported.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        recognition.start();
+        recognition.onstart = () => textarea.placeholder = "Listening...";
+        recognition.onresult = (event) => textarea.value = event.results[0][0].transcript;
+        recognition.onerror = (event) => alert("Error: " + event.error);
+        recognition.onend = () => textarea.placeholder = "Explain your query...";
+    }
+</script> -->
+
+
+</html>

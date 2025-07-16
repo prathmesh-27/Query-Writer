@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query History</title>
+</head>
+
+<body>
+    <h1>Query History</h1>
+    <a href="{% url 'home' %}">← Back to home</a>
+    <hr>
+    <ul>
+        {% for q in all_queries %}
+        <li>
+            <strong>{{ q.explanation }}</strong><br>
+            SQL: <code>{{ q.sql_output }}</code><br>
+            DB: {{ q.db_type }} | Model: {{ q.model_used }}<br>
+            Time: {{ q.timestamp }}
+        </li>
+        {% empty %}
+        <li>No queries yet.</li>
+        {% endfor %}
+    </ul>
+
+</body>
+
+</html>
