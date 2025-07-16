@@ -19,7 +19,7 @@ Clean, responsive UI built with Django Templates
 
 ### Demo
 
-> 📹[demo](demo/Query Rewriter.mp4)
+> 📹[demo](demo/demo.gif)
 
 
 ### Project Structure
